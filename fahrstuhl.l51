@@ -1,0 +1,112 @@
+; MCS51 Assembler Version 4.1.4 vom 10. 08. 03, A. Roth Controllertechnik, 17/ July 2026
+				1:1	; 17/07/2026 10:56:12
+				1:2	
+				1:3	#cpu = 89S8252	; @12 MHz
+				1:4	
+				1:5	#use LCALL
+				1:6	
+				1:7	; Initialisierung
+0000	75	81	7F	1:8	mov SP, # 7Fh	; Stackbeginn
+				1:9	
+0003				1:10	init:
+				1:11	; Ausgabe
+0003	D2	85		1:12	setb P0.5
+0005	C2	86		1:13	clr P0.6
+0007	D2	87		1:14	setb P0.7
+				1:15	; Logik
+0009	20	83	F7	1:16	jb P0.3, init						; wenn "Endschalter Unten" nicht gedrückt, bleibe in "init"
+000C	30	82	69	1:17	jnb P0.2, error					; Error wenn "Endschalter Oben" und "Endschalter Unten" gedrückt
+000F	30	84	66	1:18	jnb P0.4, error 					; Error wenn "Positionsschalter" und "Endschalter Unten" gedrückt
+				1:19	; sjmp warteUnten				; wechsel zu "warteUnten"
+				1:20	
+0012				1:21	warteUnten:
+				1:22	; Ausgabe
+0012	C2	85		1:23	clr P0.5
+0014	C2	86		1:24	clr P0.6
+0016	C2	87		1:25	clr P0.7
+				1:26	; Logik
+0018	20	83	5D	1:27	jb P0.3, error					; Error wenn "Endschalter Unten" nicht gedrückt im Zustand "warteUnten"
+001B	30	82	5A	1:28	jnb P0.2, error					; Error wenn "Endschalter Unten" gedrückt
+001E	30	84	57	1:29	jnb P0.4, error					; Error wenn "Positionsschalter" gedrückt
+0021	20	80	EE	1:30	jb P0.0, 	warteUnten				; Eingabe "Taster Abwärts" ist nicht gedrückt, bleibe in "warteUnten"
+0024	30	81	EB	1:31	jnb P0.1, warteUnten				; Eingabe "Taster Aufwärts" ist gedrückt, bleibe in "warteUnten"
+				1:32	; sjmp langsamHoch				; wechsel zu "langsamHoch"
+				1:33	
+0027				1:34	langsamHoch:
+				1:35	; Ausgabe
+0027	D2	85		1:36	setb P0.5
+0029	D2	86		1:37	setb P0.6
+				1:38	; Logik
+002B	30	83	4A	1:39	jnb P0.3, error					; Error wenn "Endschalter Unten" gedrückt
+002E	20	82	05	1:40	jb P0.2, langsamHochNichtP02	; Fallunterscheidung wenn "Endschalter Oben" nicht gedrückt ist
+0031	30	84	44	1:41	jnb P0.4, error					; Error wenn "Endschalter Oben" und "Positionsschalter" gleichzeitig gedrückt sind
+0034	80	10		1:42	sjmp warteOben					; wechsel Zustand in "warteOben" weil nur "Endschalter Oben" gedrückt
+0036				1:43		langsamHochNichtP02:			; wenn "Endschalter Oben" nicht gedrückt
+0036	20	84	EE	1:44		jb P0.4, langsamHoch			; wenn "Positionsschalter" und "Endschalter Oben" nicht gedrückt, bleibe in "langsamHoch"
+				1:45	;	sjmp hoch						; wenn "Positionsschalter" gedrückt und "Endschalter Oben" nicht gedrückt, wechsel zu "hoch"
+				1:46	
+0039				1:47	hoch:
+				1:48	; Ausgabe
+0039	C2	85		1:49	clr P0.5
+				1:50	; Logik
+003B	30	83	3A	1:51	jnb P0.3, error					; Error wenn "Endschalter Unten" gedrückt
+003E	30	82	37	1:52	jnb P0.2, error					; Error wenn "Endschalter Oben" gedrückt
+0041	30	84	E3	1:53	jnb P0.4, langsamHoch			; wenn "Positionsschalter" gedrückt, wechsel zu "langsamHoch"
+0044	80	F3		1:54	sjmp hoch						; weiter zu "hoch"
+				1:55	
+0046				1:56	warteOben:
+				1:57	; Ausgabe
+0046	C2	85		1:58	clr P0.5
+0048	C2	86		1:59	clr P0.6
+				1:60	; Logik
+004A	20	82	2B	1:61	jb P0.2, error					; Error wenn "Endschalter Oben" nicht gedrückt
+004D	30	83	28	1:62	jnb P0.3, error					; Error wenn "Endschalter Unten" gedrückt
+0050	30	84	25	1:63	jnb P0.4, error					; Error wenn "Positionsschalter" gedrückt
+0053	20	81	F0	1:64	jb P0.1, warteOben				; wenn "Taster Aufwärts" nicht gedrückt, bleibe in "warteOben"
+0056	30	80	ED	1:65	jnb P0.0, warteOben				; wenn "Taster Abwäts" gedrückt, bleibe in "warteOben"
+				1:66	; sjmp langsamRunter			; weiter zu "langsamRunter"
+				1:67	
+0059				1:68	langsamRunter:
+				1:69	; Ausgabe 
+0059	D2	85		1:70	setb P0.5
+005B	D2	87		1:71	setb P0.7
+				1:72	; Logik
+005D	30	82	18	1:73	jnb P0.2, error					; Error wenn "Endschalter Oben" gedrückt
+0060	20	83	05	1:74	jb P0.3, langsamRunterNichtP03	; Fallunterscheidung wenn "Endschalter Unten" nicht gedrückt ist
+0063	30	84	12	1:75	jnb P0.4, error					; Error wenn "Endschalter Unten" und "Positionsschalter" gleichzeitig gedrückt sind
+0066	80	AA		1:76	sjmp warteUnten					; wechsel Zustand in "warteUnten" wenn nur "Endschalter Unten" gedrückt
+0068				1:77		langsamRunterNichtP03:			; wenn "Endschalter Unten" nicht gedrückt
+0068	20	84	EE	1:78		jb P0.4, langsamRunter			; wenn "Positionsschalter" und "Endschalter Unten" nicht gedrückt, bleibe in "langsamRunter"
+				1:79	;	sjmp runter						; wenn "Positionsschalter" gedrückt und "Endschalter Unten" nicht gedrückt, wechsel zu "runter"
+				1:80	
+006B				1:81	runter:
+				1:82	; Ausgabe 
+006B	C2	85		1:83	clr P0.5
+				1:84	; Logik
+006D	30	83	08	1:85	jnb P0.3, error					; Error wenn "Endschalter Unten" gedrückt
+0070	30	82	05	1:86	jnb P0.2, error					; Error wenn "Endschalter Oben" gedrückt
+0073	30	84	E3	1:87	jnb P0.4, langsamRunter			; wenn "Positionsschalter" gedrückt, wechsel zu "langsamRunter"
+0076	80	F3		1:88	sjmp runter						; bleib in "runter"
+				1:89	
+0078				1:90	error:
+				1:91	; Ausgabe
+0078	C2	85		1:92	clr P0.5
+007A	C2	86		1:93	clr P0.6
+007C	C2	87		1:94	clr P0.7
+				1:95	
+007E	80	FE		1:96	end
+				1:97	; * * * Hauptprogramm Ende * * *
+
+ 97 Zeilen übersetzt. Code Ende bei 0080h.
+ 10 Labels:
+	init: 0003h
+	warteUnten: 0012h
+	langsamHoch: 0027h
+	langsamHochNichtP02: 0036h
+	hoch: 0039h
+	warteOben: 0046h
+	langsamRunter: 0059h
+	langsamRunterNichtP03: 0068h
+	runter: 006Bh
+	error: 0078h
+
