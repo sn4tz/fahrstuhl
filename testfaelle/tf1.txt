@@ -14,5 +14,5 @@ Testfall 1:
 
 	Beobachtetes Ergebnis:
 		Der erwartete Zustandübergang findet statt.
-		Genauso der wechsel der Ausgabe der Motorsteuerung von "101" zu "000".
+		Genauso der Wechsel der Ausgabe der Motorsteuerung von "101" zu "000".
 
