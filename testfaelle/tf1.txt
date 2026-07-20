@@ -1,0 +1,18 @@
+Testfall 1:
+	Der Tesfall 1 behandelt den Übergang aus dem "Init" Zustand in den "warte unten".
+
+	Startzustand: Init
+
+	Eingabe:
+		P0.3 (Endschalter unten)
+
+	Ablauf:
+		Das Programm wird gestartet im Simulator und wir befinden uns direkt in Zustand Init mit der erwarteten Ausgabe "101" (Runter langsam).
+		Wir lassen das Programm erstmal etwas ohne Eingabe laufen; das Programm verhält sich wie erwartet und bleibt im Init Zustand bzw. durchläuft diesen dauerhaft.
+		Nach einiger Zeit schalten wir den Pin P0.3 (Endschalter unten) um.
+		Wir beobachten einen Wechsel in den Zustand "warte unten" und damit auch eine Änderung an unserer Ausgabe "000" (Motor steht).
+
+	Beobachtetes Ergebnis:
+		Der erwartete Zustandübergang findet statt.
+		Genauso der wechsel der Ausgabe der Motorsteuerung von "101" zu "000".
+

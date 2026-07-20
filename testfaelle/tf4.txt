@@ -1,0 +1,17 @@
+Testfall 4:
+	Der Testfall 4 behandelt einen Übergang in den Zustand "error" um sowohl den Übergang zu testen als auch die Ausgaben des Zustands.
+
+	Startzustand: warte unten
+
+	Eingabe:
+		P0.3 (Endschalter unten)
+		P0.4 (Positionsschalter)
+
+	Ablauf:
+		Das Programm wird gestartet und wir setzen nach der Initialisierung unsere PC auf das Label des Zustands "warten unten" und schließen P0.3 (Endschalter unten).
+		Als nächstes schließen wir P0.4 (Positionsschalter), was in unserem Falle zu einem Wechsel in den Zustand "error" führt.
+
+	Beobachtetes Ergebnis:
+		Der erwartete Zustandübergang findet statt.
+		Genauso der wechsel der Ausgaben für die Motorsteuerung.
+

@@ -1,0 +1,26 @@
+Testfall 2:
+	Der Testfall 2 behandelt das korrekte Hochfahren des Fahrstuhls.
+	Hierbei muss darauf geachtet werden das die Eingaben zu den richtigen Zeitpunkten ein- und ausgeschalten werden.
+	Wir betrachten hierbei die korrekte Abfolge der Eingaben um in den Zustand "warte oben" zu gelangen.
+	"warte unten" --- P0.0 --> "langsam hoch" --- P0.4 --> "hoch" --- P0.4 --> "langsam hoch" --- P0.2 --> "warte oben"
+
+	Startzustand: warte unten
+
+	Eingabe:
+		P0.0 (Taster Aufwärts/Rauf rufen)
+		P0.2 (Endschalter oben)
+		P0.3 (Endschalter unten)
+		P0.4 (Positionsschalter)
+
+	Ablauf:
+		Das Programm wird gestartet im Simulator und wir setzen unseren PC nach der Initialisierung auf das Label des Zustands "warte unten" und den Eingang P0.3 auf geschlossen.
+		Wenn wir den Eingang P0.0 (Taster Aufwärts/Rauf rufen) schließen, wird der Zustand in "langsam hoch" gewechselt, für welchen wir P0.3 wieder öffnen müssen um nicht in den Zustand "error" zu wechseln.
+		Wir befinden uns nun im Zustand "langsam hoch".
+		Sobald wir P0.4 (Positionsschalter) schließen, also wir dem Modell nach am Positionsschalter unten vorbeigefahren sind, wechseln wir in den Zustand "hoch".
+		In diesem befinden wir uns auch solange bis wir wieder P0.4 schließen, also am Positionsschalter oben vorbeifahren und wechseln dann zurück in den Zustand "langsam hoch".
+		Wenn wir im Zustand "langsam hoch" nun P0.2 (Endschalter oben) schließen, wechseln wir in den Zustand "warte oben" und der Test ist beendet.
+
+	Beobachtetes Ergebnis:
+		Der erwartete Zustandübergang findet statt.
+		Genauso der wechsel der Ausgaben für die Motorsteuerung.
+

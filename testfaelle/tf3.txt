@@ -1,0 +1,26 @@
+Testfall 3:
+	Der Testfall 3 behandelt das korrekte Runterfahren des Fahrstuhls.
+	Hierbei muss darauf geachtet werden das die Eingaben zu den richtigen Zeitpunkten ein- und ausgeschalten werden.
+	Wir betrachten hierbei die korrekte Abfolge der Eingaben um in den Zustand "warte unten" zu gelangen.
+	"warte oben" --- P0.1 --> "langsam runter" --- P0.4 --> "runter" --- P0.4 --> "langsam runter" --- P0.3 --> "warte unten"
+
+	Startzustand: warte oben
+
+	Eingabe:
+		P0.1 (Taster Abwärts/Runter rufen)
+		P0.2 (Endschalter oben)
+		P0.3 (Endschalter unten)
+		P0.4 (Positionsschalter)
+
+	Ablauf:
+		Das Programm wird gestartet im Simulator und wir setzen unseren PC nach der Initialisierung auf das Label des Zustands "warte oben" und den Eingang P0.2 (Endschalter oben) auf geschlossen.
+		Wenn wir den Eingang P0.1 (Taster Aufwärts/Rauf rufen) schließen, wird der Zustand in "langsam runter" gewechselt, für welchen wir P0.2 wieder öffnen müssen um nicht in den Zustand "error" zu wechseln.
+		Wir befinden uns nun im Zustand "langsam runter".
+		Sobald wir P0.4 (Positionsschalter) schließen, also wir dem Modell nach am Positionsschalter oben vorbeigefahren sind, wechseln wir in den Zustand "runter".
+		In diesem befinden wir uns auch solange bis wir wieder P0.4 schließen, also am Positionsschalter unten vorbeifahren sind und wechseln dann zurück in den Zustand "langsam runter".
+		Wenn wir im Zustand "langsam runter" nun P0.3 (Endschalter unten) schließen, wechseln wir in den Zustand "warte unten" und der Test ist beendet.
+
+	Beobachtetes Ergebnis:
+		Der erwartete Zustandübergang findet statt.
+		Genauso der wechsel der Ausgaben für die Motorsteuerung.
+
